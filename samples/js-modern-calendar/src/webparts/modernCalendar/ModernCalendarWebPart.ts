@@ -29,6 +29,8 @@ import {
 import { EventObjectInput, OptionsInput } from 'fullcalendar'; 
 import { Default as View } from 'fullcalendar/View';
 
+import * as microsoftTeams from '@microsoft/teams-js';
+
 export interface ISPLists {
   value: ISPList[];
 }
@@ -44,6 +46,8 @@ export interface EventObjects {
 
 export default class ModernCalendarWebPart extends BaseClientSideWebPart<IModernCalendarWebPartProps> {
 
+  private _teamsContext: microsoftTeams.Context;
+
   public constructor() {
     super();
     //Modify with your a CDN or local path
@@ -55,6 +59,12 @@ export default class ModernCalendarWebPart extends BaseClientSideWebPart<IModern
 
     if (this.properties.theme != null){
       SPComponentLoader.loadCss(this.properties.theme);
+    }
+
+    if (this._teamsContext) {
+      // We have teams context for the web part
+
+      if (this._teamsContext.theme.toLowerCase() == "dark") jQuery("#spPageChromeAppDiv").css("filter","invert(100%)");
     }
 
     if (!this.properties.other){
@@ -258,9 +268,17 @@ export default class ModernCalendarWebPart extends BaseClientSideWebPart<IModern
   private _dropdownOptions: IPropertyPaneDropdownOption[] = [];
   private _columnOptions: IPropertyPaneDropdownOption[] = [];
 
-  public onInit<T>(): Promise<T> {
-    //this._siteOptions.push({key:this.context.pageContext.web.absoluteUrl, text:'This Site'});
-    return Promise.resolve();
+  protected onInit(): Promise<any> {
+    let retVal: Promise<any> = Promise.resolve();
+    if (this.context.microsoftTeams) {
+      retVal = new Promise((resolve, reject) => {
+        this.context.microsoftTeams.getContext(context => {
+          this._teamsContext = context;
+          resolve();
+        });
+      });
+    }
+    return retVal;
   }
 
   private _getSiteRootWeb(): Promise<ISPLists> {
