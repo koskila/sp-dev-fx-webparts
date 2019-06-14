@@ -47,8 +47,8 @@ export default class ModernCalendarWebPart extends BaseClientSideWebPart<IModern
   public constructor() {
     super();
     //Modify with your a CDN or local path
-    SPComponentLoader.loadCss('//publiccdn.sharepointonline.com/pcpro365.sharepoint.com/163800463de5f9285ad4f6f9cc0a97985b96b057e062d4733849cc0fc90eeffbd6d72bb8/calendar/sweetalert2.min.css');
-    SPComponentLoader.loadCss('//publiccdn.sharepointonline.com/pcpro365.sharepoint.com/163800463de5f9285ad4f6f9cc0a97985b96b057e062d4733849cc0fc90eeffbd6d72bb8/calendar/fullcalendar.min.css');    
+    SPComponentLoader.loadCss('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css');
+    SPComponentLoader.loadCss('https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css');
   }
 
   public render(): void {
